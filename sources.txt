@@ -1,3 +1,6 @@
-# <source-name> <url> <CATEGORY,CATEGORY,...>   (categories are matched case-insensitively)
-zapret https://github.com/kutovoys/ru_gov_zapret/releases/latest/download/zapret.dat ZAPRET-ZAPAD
-dlc https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat facebook,instagram,whatsapp,youtube,discord,twitter,telegram,linkedin,pornhub,patreon,soundcloud,signal,openai,anthropic,netflix,spotify,disney,hbo,twitch,tiktok,bilibili,playstation,steam,epicgames,xbox,blizzard,riot,ea,nvidia,paypal,visa,mastercard,binance,amazon,booking,reddit,github
+# <proxy|exclude> <source-name> <url> <CATEGORY,CATEGORY,...>   (categories matched case-insensitively)
+# Precedence: lists/proxy.txt (manual) > exclude > upstream proxy categories.
+proxy zapret https://github.com/kutovoys/ru_gov_zapret/releases/latest/download/zapret.dat ZAPRET-ZAPAD
+proxy dlc https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat facebook,instagram,whatsapp,youtube,discord,twitter,telegram,linkedin,pornhub,patreon,soundcloud,signal,openai,anthropic,netflix,spotify,disney,hbo,twitch,tiktok,bilibili,playstation,steam,epicgames,xbox,blizzard,riot,ea,nvidia,paypal,visa,mastercard,binance,amazon,booking,reddit,github
+# Russian commercial + government services and RU TLDs: never tunnel
+exclude dlc https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat CATEGORY-RU,CATEGORY-GOV-RU,TLD-RU

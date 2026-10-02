@@ -121,30 +121,47 @@ def fetch(url):
 
 def main():
     os.makedirs(DIST, exist_ok=True)
-    cats, stats = {}, []
+    cats = {"proxy": {}, "exclude": {}}
+    stats, cache = [], {}
     for line in open("sources.txt", encoding="utf-8"):
         line = line.split("#", 1)[0].strip()
         if not line:
             continue
-        name, url, want = line.split(None, 2)
+        target, name, url, want = line.split(None, 3)
+        if target not in cats:
+            sys.exit(f"sources.txt: unknown target {target!r} (use proxy or exclude)")
         want = {c.strip().upper() for c in want.split(",") if c.strip()}
-        data = fetch(url)
-        got = parse_geosite(data, want)
+        if url not in cache:
+            cache[url] = fetch(url)
+        got = parse_geosite(cache[url], want)
         missing = want - got.keys()
         if missing:
             sys.exit(f"{name}: categories not found upstream: {', '.join(sorted(missing))}")
         for c, doms in got.items():
-            cats[c] = dedup(cats.get(c, []) + doms)
-        stats.append(f"source {name}: {len(data)/1e6:.1f} MB, {len(got)} categories, "
+            cats[target][c] = dedup(cats[target].get(c, []) + doms)
+        stats.append(f"{target} {name}: {len(cache[url])/1e6:.1f} MB, {len(got)} categories, "
                      f"{sum(len(d) for d in got.values())} entries")
 
-    manual = read_list("lists/proxy.txt")
-    exclude = read_list("lists/exclude.txt")
-    proxy = dedup([d for doms in cats.values() for d in doms] + manual)
+    manual = dedup(read_list("lists/proxy.txt"))
+    exclude = dedup([d for doms in cats["exclude"].values() for d in doms] + read_list("lists/exclude.txt"))
+    # Precedence: manual proxy > exclude > upstream proxy.
+    # An exclude entry drops an upstream proxy entry if it is the same domain or a parent of it;
+    # single-label entries (TLDs like "ru") only mean "direct by default" and drop nothing.
+    excl_domains = {v for t, v in exclude if t in (DOMAIN, FULL) and "." in v}
+    def excluded(v):
+        parts = v.split(".")
+        return any(".".join(parts[i:]) in excl_domains for i in range(len(parts) - 1))
+    manual_vals = {v for _, v in manual}
+    upstream = dedup([d for doms in cats["proxy"].values() for d in doms])
+    dropped = sorted({v for t, v in upstream if v not in manual_vals and excluded(v)})
+    proxy = dedup([d for d in upstream if d[1] in manual_vals or not excluded(d[1])] + manual)
+    exclude = [d for d in exclude if d[1] not in manual_vals]
     excl_vals = {v for _, v in exclude}
-    proxy = [d for d in proxy if d[1] not in excl_vals]
+    if dropped:
+        stats.append(f"dropped from PROXY by exclude ({len(dropped)}): {', '.join(dropped[:30])}"
+                     + (" ..." if len(dropped) > 30 else ""))
 
-    out = {"PROXY": proxy, "EXCLUDE": dedup(exclude), "MANUAL": dedup(manual), **cats}
+    out = {"PROXY": proxy, "EXCLUDE": exclude, "MANUAL": manual, **cats["proxy"], **cats["exclude"]}
     with open(f"{DIST}/geosite.dat", "wb") as f:
         for code in sorted(out):
             f.write(enc_geosite(code, out[code]))
