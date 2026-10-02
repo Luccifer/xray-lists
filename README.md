@@ -11,6 +11,7 @@ built from upstream geosite files plus our own lists.
 | [`proxy.txt`](../../releases/latest/download/proxy.txt) | plain domains to tunnel (dnsmasq `nftset=`, RouterOS DNS FWD `address-list=`) |
 | [`exclude.txt`](../../releases/latest/download/exclude.txt) | domains never to tunnel: Russian commercial + government services, RU TLDs |
 | [`cidr.txt`](../../releases/latest/download/cidr.txt) | IPv4 subnets to tunnel (Telegram) |
+| [`mikrotik.rsc`](../../releases/latest/download/mikrotik.rsc) | RouterOS: DNS FWD entries → address-list `to-xray` (+ cidr.txt subnets); `/import` it |
 | [`sha256sums.txt`](../../releases/latest/download/sha256sums.txt) | poll this first; download the rest only if it changed |
 
 URL pattern: `https://github.com/<owner>/xray-lists/releases/latest/download/<file>`

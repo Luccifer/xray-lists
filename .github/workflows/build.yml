@@ -43,7 +43,7 @@ jobs:
             echo "No changes, not publishing."; exit 0
           fi
           tag=$(date -u +%Y%m%d%H%M)
-          gh release create "$tag" dist/geosite.dat dist/proxy.txt dist/exclude.txt dist/cidr.txt dist/sha256sums.txt dist/stats.txt \
+          gh release create "$tag" dist/geosite.dat dist/proxy.txt dist/exclude.txt dist/cidr.txt dist/mikrotik.rsc dist/sha256sums.txt dist/stats.txt \
             --repo "$GITHUB_REPOSITORY" --title "$tag" --notes-file dist/stats.txt --latest
           # keep the 20 newest releases
           gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName --jq '.[20:][].tagName' |

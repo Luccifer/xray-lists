@@ -174,6 +174,19 @@ def main():
     cidrs = [l.split("#", 1)[0].strip() for l in open("lists/cidr.txt") if l.split("#", 1)[0].strip()]
     open(f"{DIST}/cidr.txt", "w").write("\n".join(cidrs) + "\n")
 
+    # RouterOS: DNS FWD entries put resolved IPs of listed domains into address-list "to-xray".
+    full = {v for t, v in proxy if t == FULL}
+    with open(f"{DIST}/mikrotik.rsc", "w") as f:
+        f.write("# xray-lists for RouterOS: /import file-name=mikrotik.rsc\n")
+        f.write('/ip dns static remove [find comment="xray-lists"]\n')
+        for v in plain:
+            sub = "no" if v in full else "yes"
+            f.write(f':do {{ /ip dns static add name="{v}" type=FWD forward-to=1.1.1.1 match-subdomain={sub} '
+                    f'address-list=to-xray comment="xray-lists" }} on-error={{}}\n')
+        for c in cidrs:
+            f.write(f':do {{ /ip firewall address-list add list=to-xray address={c} comment="xray-lists" }} on-error={{}}\n')
+        f.write(f':log info "xray-lists: imported {len(plain)} domains, {len(cidrs)} subnets"\n')
+
     stats += [f"PROXY: {len(proxy)} entries ({len(plain)} in proxy.txt, {skipped} keyword/regexp only in .dat)",
               f"EXCLUDE: {len(excl_vals)}  CIDR: {len(cidrs)}",
               f"geosite.dat: {os.path.getsize(DIST + '/geosite.dat')/1e3:.1f} KB, categories: {', '.join(sorted(out))}"]
@@ -185,7 +198,7 @@ def main():
         sys.exit(f"proxy.txt shrank from {prev} to {len(plain)} (>20%), refusing to publish")
 
     with open(f"{DIST}/sha256sums.txt", "w") as f:
-        for n in ("geosite.dat", "proxy.txt", "exclude.txt", "cidr.txt"):
+        for n in ("geosite.dat", "proxy.txt", "exclude.txt", "cidr.txt", "mikrotik.rsc"):
             f.write(f"{hashlib.sha256(open(f'{DIST}/{n}', 'rb').read()).hexdigest()}  {n}\n")
     print("\n".join(stats))
 
