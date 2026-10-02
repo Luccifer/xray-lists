@@ -1,0 +1,2 @@
+# never tunnel: resolve to shared public IPs (ping.ui.com = 1.1.1.1, 8.8.8.8)
+ping.ui.com
