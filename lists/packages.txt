@@ -1,0 +1,120 @@
+# Package repositories / registries for common OSes and toolchains.
+# Some vendors answer 403 to Russian IPs (HashiCorp/Vault, Elastic, MongoDB, parts of Docker, some Alpine mirrors),
+# others are flaky. Tunnelling them keeps apt/dnf/apk/pip/npm/docker pulls working on servers and desktops.
+# Same syntax as proxy.txt (domain = with subdomains; full: keyword: regexp:). Takes precedence over EXCLUDE.
+
+# --- Debian / Ubuntu
+deb.debian.org
+security.debian.org
+ftp.debian.org
+cdn-fastly.deb.debian.org
+debian.map.fastlydns.net
+archive.ubuntu.com
+security.ubuntu.com
+ports.ubuntu.com
+changelogs.ubuntu.com
+esm.ubuntu.com
+motd.ubuntu.com
+launchpad.net
+launchpadcontent.net
+api.snapcraft.io
+snapcraft.io
+snapcraftcontent.com
+
+# --- Alpine
+alpinelinux.org
+
+# --- Fedora / RHEL / CentOS / Rocky / Alma / EPEL
+fedoraproject.org
+getfedora.org
+centos.org
+rockylinux.org
+almalinux.org
+redhat.com
+redhat.io
+access.redhat.com
+cdn.redhat.com
+quay.io
+
+# --- Arch / openSUSE / Proxmox
+archlinux.org
+pkgbuild.com
+opensuse.org
+proxmox.com
+
+# --- HashiCorp (Vault, Terraform, Consul, Packer): 403 for RU
+hashicorp.com
+releases.hashicorp.com
+apt.releases.hashicorp.com
+rpm.releases.hashicorp.com
+registry.terraform.io
+terraform.io
+checkpoint-api.hashicorp.com
+
+# --- Containers / Kubernetes
+docker.com
+docker.io
+download.docker.com
+registry-1.docker.io
+production.cloudflare.docker.com
+gcr.io
+ghcr.io
+pkg-containers.githubusercontent.com
+k8s.io
+registry.k8s.io
+pkgs.k8s.io
+prod-cdn.packages.k8s.io
+helm.sh
+get.helm.sh
+
+# --- Language ecosystems
+pypi.org
+pythonhosted.org
+files.pythonhosted.org
+registry.npmjs.org
+npmjs.com
+yarnpkg.com
+proxy.golang.org
+sum.golang.org
+golang.org
+go.dev
+crates.io
+static.crates.io
+index.crates.io
+static.rust-lang.org
+rustup.rs
+rubygems.org
+repo.maven.apache.org
+repo1.maven.org
+plugins.gradle.org
+services.gradle.org
+packagist.org
+nuget.org
+api.nuget.org
+cpan.org
+hackage.haskell.org
+
+# --- GitHub release assets / raw / Homebrew
+objects.githubusercontent.com
+release-assets.githubusercontent.com
+raw.githubusercontent.com
+codeload.github.com
+formulae.brew.sh
+
+# --- Vendor repos often geo-blocked for RU
+packages.microsoft.com
+artifacts.elastic.co
+elastic.co
+repo.mongodb.org
+mongodb.org
+fastdl.mongodb.org
+packages.gitlab.com
+apt.grafana.com
+rpm.grafana.com
+dl.grafana.com
+apt.postgresql.org
+download.postgresql.org
+packages.cloud.google.com
+dl.google.com
+nvidia.github.io
+developer.download.nvidia.com

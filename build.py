@@ -142,7 +142,8 @@ def main():
         stats.append(f"{target} {name}: {len(cache[url])/1e6:.1f} MB, {len(got)} categories, "
                      f"{sum(len(d) for d in got.values())} entries")
 
-    manual = dedup(read_list("lists/proxy.txt"))
+    packages = dedup(read_list("lists/packages.txt"))
+    manual = dedup(read_list("lists/proxy.txt") + packages)
     exclude = dedup([d for doms in cats["exclude"].values() for d in doms] + read_list("lists/exclude.txt"))
     # Precedence: manual proxy > exclude > upstream proxy.
     # An exclude entry drops an upstream proxy entry if it is the same domain or a parent of it;
@@ -161,7 +162,7 @@ def main():
         stats.append(f"dropped from PROXY by exclude ({len(dropped)}): {', '.join(dropped[:30])}"
                      + (" ..." if len(dropped) > 30 else ""))
 
-    out = {"PROXY": proxy, "EXCLUDE": exclude, "MANUAL": manual, **cats["proxy"], **cats["exclude"]}
+    out = {"PROXY": proxy, "EXCLUDE": exclude, "MANUAL": manual, "PACKAGES": packages, **cats["proxy"], **cats["exclude"]}
     with open(f"{DIST}/geosite.dat", "wb") as f:
         for code in sorted(out):
             f.write(enc_geosite(code, out[code]))

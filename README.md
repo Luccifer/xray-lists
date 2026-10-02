@@ -20,6 +20,8 @@ URL pattern: `https://github.com/<owner>/xray-lists/releases/latest/download/<fi
 
 - `lists/proxy.txt`: our own domains. One per line; `domain` (default, includes subdomains), `full:`, `keyword:`, `regexp:`.
   Only domain/full entries reach `proxy.txt`; keyword/regexp work in `geosite.dat` only.
+- `lists/packages.txt`: package repositories/registries (Debian, Ubuntu, Alpine, Fedora/RHEL, Arch, HashiCorp, Docker, k8s,
+  PyPI, npm, Go, crates, Maven, vendor repos). Some answer 403 to RU IPs. Same syntax, same precedence as proxy.txt; category `PACKAGES`.
 - `lists/exclude.txt`: extra domains never to tunnel. EXCLUDE also includes v2fly `CATEGORY-RU` (Russian commercial
   services), `CATEGORY-GOV-RU` (government) and `TLD-RU` (`.ru`, `.su`, `.рф`, …).
   Precedence: `lists/proxy.txt` > EXCLUDE > upstream proxy categories. TLD entries mean "direct by default" and
