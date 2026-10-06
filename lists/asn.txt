@@ -15,3 +15,4 @@ AS40021   # Contabo US
 AS16276   # OVH
 AS60781   # Leaseweb NL
 AS28753   # Leaseweb DE
+AS213438  # EGIHosting (Kali mirror mirror.nl.cdn-perfprod.com, blocked directly)

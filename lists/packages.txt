@@ -3,6 +3,10 @@
 # others are flaky. Tunnelling them keeps apt/dnf/apk/pip/npm/docker pulls working on servers and desktops.
 # Same syntax as proxy.txt (domain = with subdomains; full: keyword: regexp:). Takes precedence over EXCLUDE.
 
+# --- Kali (http.kali.org redirects to mirrors; mirror.nl.cdn-perfprod.com is blocked directly, 2026-10-06)
+kali.org
+kali.download
+cdn-perfprod.com
 # --- Debian / Ubuntu
 deb.debian.org
 security.debian.org
