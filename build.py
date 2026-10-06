@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """Build small xray geosite.dat + plain-text lists from upstream .dat files and lists/*.txt.
 
-Inputs:  sources.txt (name url CATEGORIES), lists/proxy.txt, lists/exclude.txt, lists/cidr.txt
+Inputs:  sources.txt (name url CATEGORIES), lists/proxy.txt, lists/exclude.txt, lists/cidr.txt, lists/asn.txt
 Outputs (dist/):
   geosite.dat   categories: PROXY (everything to tunnel), EXCLUDE, plus one per upstream category
   proxy.txt     domains to tunnel (domain/full entries only, for dnsmasq nftset / RouterOS)
   exclude.txt   domains never to tunnel
   cidr.txt      IPv4 subnets to tunnel
+  nets.txt      IPv4 prefixes of the networks in lists/asn.txt (aggregated)
+  nets.rsc      RouterOS: the same as address-list "to-xray-net-new" entries (the router script swaps lists)
   stats.txt, sha256sums.txt
 No dependencies (stdlib only).
 """
-import hashlib, os, re, sys, urllib.request
+import hashlib, ipaddress, json, os, re, sys, urllib.request
 
 DIST = "dist"
 # GeoSite Domain.Type
@@ -119,6 +121,22 @@ def fetch(url):
         return r.read()
 
 
+def asn_prefixes():
+    """IPv4 prefixes announced by the AS numbers in lists/asn.txt, aggregated. Fails the build if any AS returns none."""
+    nets, stats = [], []
+    for line in open("lists/asn.txt"):
+        asn = line.split("#", 1)[0].strip().upper()
+        if not asn:
+            continue
+        d = json.loads(fetch(f"https://stat.ripe.net/data/announced-prefixes/data.json?resource={asn}&sourceapp=xray-lists"))
+        got = [ipaddress.ip_network(p["prefix"]) for p in d["data"]["prefixes"] if ":" not in p["prefix"]]
+        if not got:
+            sys.exit(f"{asn}: no IPv4 prefixes from RIPEstat, refusing to publish")
+        stats.append(f"{asn}: {len(got)}")
+        nets += got
+    return list(ipaddress.collapse_addresses(nets)), stats
+
+
 def main():
     os.makedirs(DIST, exist_ok=True)
     cats = {"proxy": {}, "exclude": {}}
@@ -188,6 +206,14 @@ def main():
             f.write(f':do {{ /ip firewall address-list add list=to-xray address={c} comment="xray-lists" }} on-error={{}}\n')
         f.write(f':log info "xray-lists: imported {len(plain)} domains, {len(cidrs)} subnets"\n')
 
+    nets, nstats = asn_prefixes()
+    open(f"{DIST}/nets.txt", "w").write("\n".join(map(str, nets)) + "\n")
+    with open(f"{DIST}/nets.rsc", "w") as f:
+        f.write("/ip firewall address-list\n")
+        for n in nets:
+            f.write(f"add list=to-xray-net-new address={n} timeout=3d comment=xray-nets\n")
+
+    stats += [f"NETS: {len(nets)} aggregated prefixes ({', '.join(nstats)})"]
     stats += [f"PROXY: {len(proxy)} entries ({len(plain)} in proxy.txt, {skipped} keyword/regexp only in .dat)",
               f"EXCLUDE: {len(excl_vals)}  CIDR: {len(cidrs)}",
               f"geosite.dat: {os.path.getsize(DIST + '/geosite.dat')/1e3:.1f} KB, categories: {', '.join(sorted(out))}"]
@@ -197,9 +223,12 @@ def main():
     prev = os.environ.get("PREV_PROXY_COUNT")
     if prev and prev.isdigit() and len(plain) < int(prev) * 8 // 10:
         sys.exit(f"proxy.txt shrank from {prev} to {len(plain)} (>20%), refusing to publish")
+    prev = os.environ.get("PREV_NETS_COUNT")
+    if prev and prev.isdigit() and len(nets) < int(prev) * 8 // 10:
+        sys.exit(f"nets.txt shrank from {prev} to {len(nets)} (>20%), refusing to publish")
 
     with open(f"{DIST}/sha256sums.txt", "w") as f:
-        for n in ("geosite.dat", "proxy.txt", "exclude.txt", "cidr.txt", "mikrotik.rsc"):
+        for n in ("geosite.dat", "proxy.txt", "exclude.txt", "cidr.txt", "mikrotik.rsc", "nets.txt", "nets.rsc"):
             f.write(f"{hashlib.sha256(open(f'{DIST}/{n}', 'rb').read()).hexdigest()}  {n}\n")
     print("\n".join(stats))
 

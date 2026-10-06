@@ -11,6 +11,8 @@ built from upstream geosite files plus our own lists.
 | [`proxy.txt`](../../releases/latest/download/proxy.txt) | plain domains to tunnel (dnsmasq `nftset=`, RouterOS DNS FWD `address-list=`) |
 | [`exclude.txt`](../../releases/latest/download/exclude.txt) | domains never to tunnel: Russian commercial + government services, RU TLDs |
 | [`cidr.txt`](../../releases/latest/download/cidr.txt) | IPv4 subnets to tunnel (Telegram) |
+| [`nets.txt`](../../releases/latest/download/nets.txt) | IPv4 prefixes of the hosting/CDN networks in `lists/asn.txt` (aggregated) |
+| [`nets.rsc`](../../releases/latest/download/nets.rsc) | RouterOS: the same as address-list `to-xray-net-new` (timeout 3d); a router script imports it and swaps lists |
 | [`mikrotik.rsc`](../../releases/latest/download/mikrotik.rsc) | RouterOS: DNS FWD entries → address-list `to-xray` (+ cidr.txt subnets); `/import` it |
 | [`sha256sums.txt`](../../releases/latest/download/sha256sums.txt) | poll this first; download the rest only if it changed |
 
@@ -27,6 +29,8 @@ URL pattern: `https://github.com/<owner>/xray-lists/releases/latest/download/<fi
   Precedence: `lists/proxy.txt` > EXCLUDE > upstream proxy categories. TLD entries mean "direct by default" and
   never remove a specific domain from PROXY.
 - `lists/cidr.txt`: IPv4 subnets.
+- `lists/asn.txt`: AS numbers tunnelled by IP (Cloudflare, Hetzner, DigitalOcean, …: Russian DPI freezes TLS to them after ~16 KB).
+  Prefixes come from RIPEstat at build time; the build fails if an AS returns none or the total shrinks by more than 20%.
 - `sources.txt`: `<proxy|exclude> <name> <url> <CATEGORIES>`: upstream `.dat` files and which categories go where
   (proxy: `zapret.dat` → ZAPRET-ZAPAD, v2fly `dlc.dat` → 37 service categories; exclude: v2fly RU categories).
 

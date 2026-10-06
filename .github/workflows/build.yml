@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: build
@@ -26,14 +27,22 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release download --repo "$GITHUB_REPOSITORY" --pattern sha256sums.txt --pattern proxy.txt --dir prev 2>/dev/null; then
+          if gh release download --repo "$GITHUB_REPOSITORY" --pattern sha256sums.txt --pattern proxy.txt --pattern nets.txt --dir prev 2>/dev/null; then
             echo "count=$(wc -l < prev/proxy.txt)" >> "$GITHUB_OUTPUT"
+            [ -f prev/nets.txt ] && echo "nets=$(wc -l < prev/nets.txt)" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Build
         env:
           PREV_PROXY_COUNT: ${{ steps.prev.outputs.count }}
+          PREV_NETS_COUNT: ${{ steps.prev.outputs.nets }}
         run: python3 build.py
+
+      - name: Keep the schedule alive
+        # GitHub disables scheduled workflows after 60 days without repo activity; re-enabling resets that.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/$GITHUB_REPOSITORY/actions/workflows/build.yml/enable" || true
 
       - name: Publish if changed
         env:
@@ -43,7 +52,7 @@ jobs:
             echo "No changes, not publishing."; exit 0
           fi
           tag=$(date -u +%Y%m%d%H%M)
-          gh release create "$tag" dist/geosite.dat dist/proxy.txt dist/exclude.txt dist/cidr.txt dist/mikrotik.rsc dist/sha256sums.txt dist/stats.txt \
+          gh release create "$tag" dist/geosite.dat dist/proxy.txt dist/exclude.txt dist/cidr.txt dist/mikrotik.rsc dist/nets.txt dist/nets.rsc dist/sha256sums.txt dist/stats.txt \
             --repo "$GITHUB_REPOSITORY" --title "$tag" --notes-file dist/stats.txt --latest
           # keep the 20 newest releases
           gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName --jq '.[20:][].tagName' |

@@ -1,0 +1,17 @@
+# Networks whose IPv4 prefixes are tunnelled by IP (TCP only), regardless of domain:
+# Russian DPI freezes TLS to these hosters/CDNs after ~16-20 KB or blocks them outright.
+# One AS number per line; prefixes come from RIPEstat announced-prefixes at build time.
+AS13335   # Cloudflare
+AS209242  # Cloudflare (Spectrum/WARP)
+AS24940   # Hetzner
+AS213230  # Hetzner Cloud
+AS212317  # Hetzner Cloud (US/SG)
+AS14061   # DigitalOcean
+AS63949   # Akamai Connected Cloud (Linode)
+AS20473   # Vultr (Constant)
+AS12876   # Scaleway
+AS51167   # Contabo
+AS40021   # Contabo US
+AS16276   # OVH
+AS60781   # Leaseweb NL
+AS28753   # Leaseweb DE
