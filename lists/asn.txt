@@ -3,16 +3,24 @@
 # One AS number per line (prefixes come from RIPEstat announced-prefixes at build time) or a literal IPv4 CIDR.
 AS13335   # Cloudflare
 AS209242  # Cloudflare (Spectrum/WARP)
+AS14789   # Cloudflare
+AS132892  # Cloudflare
+AS395747  # Cloudflare SFO
 AS24940   # Hetzner
 AS213230  # Hetzner Cloud
 AS212317  # Hetzner Cloud (US/SG)
+AS215859  # Hetzner Cloud 4
 AS14061   # DigitalOcean
+AS46652   # DigitalOcean (ServerStack)
+AS393406  # DigitalOcean
 AS63949   # Akamai Connected Cloud (Linode)
 AS20473   # Vultr (Constant)
 AS12876   # Scaleway
 AS51167   # Contabo
 AS40021   # Contabo US
+AS141995  # Contabo Asia
 AS16276   # OVH
+AS35540   # OVH Telecom
 AS60781   # Leaseweb NL
 AS28753   # Leaseweb DE
 AS213438  # EGIHosting (Kali mirror mirror.nl.cdn-perfprod.com, blocked directly)
@@ -25,3 +33,7 @@ AS213438  # EGIHosting (Kali mirror mirror.nl.cdn-perfprod.com, blocked directly
 76.76.21.0/24
 66.33.60.0/24
 155.121.0.0/16
+# From github.com/V3nilla/IPSets-For-Bypass-in-Russia AS list, confirmed frozen directly 2026-10-06:
+AS62240   # Clouvider
+AS8560    # IONOS
+AS15418   # IONOS anycast (Fasthosts)
