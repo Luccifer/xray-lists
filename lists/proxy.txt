@@ -117,3 +117,7 @@ wowhead.com
 youtube-nocookie.com
 ytimg.com
 zamimg.com
+# --- appointlet: https://appt.link (AWS Frankfurt + Global Accelerator freeze, 2026-10-06)
+appt.link
+appointlet.com
+stripe.com
