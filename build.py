@@ -122,11 +122,15 @@ def fetch(url):
 
 
 def asn_prefixes():
-    """IPv4 prefixes announced by the AS numbers in lists/asn.txt, aggregated. Fails the build if any AS returns none."""
+    """IPv4 prefixes announced by the AS numbers in lists/asn.txt (plus literal CIDR lines), aggregated.
+    Fails the build if any AS returns none."""
     nets, stats = [], []
     for line in open("lists/asn.txt"):
         asn = line.split("#", 1)[0].strip().upper()
         if not asn:
+            continue
+        if "/" in asn:  # a literal prefix (provider without its own AS, e.g. Vercel inside AS16509)
+            nets.append(ipaddress.ip_network(asn))
             continue
         d = json.loads(fetch(f"https://stat.ripe.net/data/announced-prefixes/data.json?resource={asn}&sourceapp=xray-lists"))
         got = [ipaddress.ip_network(p["prefix"]) for p in d["data"]["prefixes"] if ":" not in p["prefix"]]
