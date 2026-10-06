@@ -27,9 +27,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release download --repo "$GITHUB_REPOSITORY" --pattern sha256sums.txt --pattern proxy.txt --pattern nets.txt --dir prev 2>/dev/null; then
+          if gh release download --repo "$GITHUB_REPOSITORY" --pattern sha256sums.txt --pattern proxy.txt --dir prev 2>/dev/null; then
             echo "count=$(wc -l < prev/proxy.txt)" >> "$GITHUB_OUTPUT"
-            [ -f prev/nets.txt ] && echo "nets=$(wc -l < prev/nets.txt)" >> "$GITHUB_OUTPUT"
+          fi
+          if gh release download --repo "$GITHUB_REPOSITORY" --pattern nets.txt --dir prev 2>/dev/null; then
+            echo "nets=$(wc -l < prev/nets.txt)" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Build
