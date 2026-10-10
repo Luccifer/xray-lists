@@ -1,8 +1,9 @@
 # <proxy|exclude> <source-name> <url> <CATEGORY,CATEGORY,...>   (categories matched case-insensitively)
 # Precedence: lists/proxy.txt (manual) > exclude > upstream proxy categories.
 proxy zapret https://github.com/kutovoys/ru_gov_zapret/releases/latest/download/zapret.dat ZAPRET-ZAPAD
-proxy dlc https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat facebook,instagram,whatsapp,youtube,discord,twitter,telegram,linkedin,pornhub,patreon,soundcloud,signal,openai,anthropic,netflix,spotify,disney,hbo,twitch,tiktok,bilibili,nvidia,paypal,visa,mastercard,binance,amazon,booking,reddit,github
-# Game platforms (steam, epicgames, xbox, playstation, blizzard, riot, ea) removed 2026-10-10: they work directly from RU,
-# and tunnelling them made the router reject UDP to their game servers/relays (Steam Datagram Relay) -> games couldn't connect.
+proxy dlc https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat facebook,instagram,whatsapp,youtube,discord,twitter,telegram,linkedin,pornhub,patreon,soundcloud,signal,openai,anthropic,netflix,spotify,disney,hbo,twitch,tiktok,bilibili,nvidia,paypal,visa,mastercard,binance,booking,reddit,github,epicgames,playstation,xbox,blizzard,rockstar
+# 2026-10-10: steam, riot, ea are NOT tunnelled (work directly; Steam Datagram Relay UDP broke). blizzard, playstation, xbox,
+# epicgames, rockstar ARE tunnelled (user's choice; router tunnels TCP only, game UDP goes direct). 'amazon' removed: it pulled in
+# all of amazonaws.com + cloudfront.net (app backends/anti-fraud saw a foreign IP, e.g. avito flagged 'VPN').
 # Russian commercial + government services and RU TLDs: never tunnel
 exclude dlc https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat CATEGORY-RU,CATEGORY-GOV-RU,TLD-RU
