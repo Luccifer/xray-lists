@@ -1,2 +1,7 @@
 # never tunnel: resolve to shared public IPs (ping.ui.com = 1.1.1.1, 8.8.8.8)
 ping.ui.com
+# EXBO games (StalZone, STALCRAFT): direct by user request 2026-10-10 (backends on Cloudflare 8.47.69.0 / 8.6.112.0, also in router list xray-direct)
+stalzone.com
+stalcraft.net
+exbo.net
+exbo.ru
