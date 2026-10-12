@@ -121,3 +121,8 @@ zamimg.com
 appt.link
 appointlet.com
 stripe.com
+# --- Nexus Mods (site/API on Cloudflare, files on CDN77 nexus-cdn.com), downloads struggled direct (2026-10-12)
+nexusmods.com
+nexus-cdn.com
+# --- Nexus Mods file hosts (*.nexus-cdn.com on CDN77), downloads struggled direct (2026-10-12)
+nexus-cdn.com

@@ -37,3 +37,7 @@ AS213438  # EGIHosting (Kali mirror mirror.nl.cdn-perfprod.com, blocked directly
 AS62240   # Clouvider
 AS8560    # IONOS
 AS15418   # IONOS anycast (Fasthosts)
+# Nexus Mods file CDN (CDN77 / DataCamp AS60068 node used by *.nexus-cdn.com), 2026-10-12
+89.187.188.0/22
+# Nexus Mods file CDN (CDN77 / DataCamp AS60068 block used by *.nexus-cdn.com), 2026-10-12
+89.187.188.0/22
