@@ -123,3 +123,7 @@ appointlet.com
 stripe.com
 # --- Nexus Mods file hosts (*.nexus-cdn.com on CDN77), downloads struggled direct (2026-10-12)
 nexus-cdn.com
+# --- adult sites not in v2fly category-porn (2026-10-19)
+onlyfans.com
+fansly.com
+rule34.xxx
