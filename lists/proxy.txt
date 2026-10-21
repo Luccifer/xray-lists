@@ -127,3 +127,7 @@ nexus-cdn.com
 onlyfans.com
 fansly.com
 rule34.xxx
+# --- Warhammer 40K Darktide backend (Fatshark; AWS Global Accelerator TCP freezes in RU, error 2014). Game UDP stays direct (2026-10-21)
+atoma.cloud
+fatshark.services
+fatsharkgames.com
