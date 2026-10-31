@@ -131,3 +131,7 @@ rule34.xxx
 atoma.cloud
 fatshark.services
 fatsharkgames.com
+# --- Steam Cloud saves only (Azure blob storage: steamcloudsweden / steamclouduseast2 / ...), saves failed to sync (2026-10-31)
+regexp:^steamcloud[a-z0-9-]*\.blob\.core\.windows\.net$
+full:steamcloudsweden.blob.core.windows.net
+full:steamclouduseast2.blob.core.windows.net
