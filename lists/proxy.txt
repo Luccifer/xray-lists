@@ -135,3 +135,4 @@ fatsharkgames.com
 regexp:^steamcloud[a-z0-9-]*\.blob\.core\.windows\.net$
 full:steamcloudsweden.blob.core.windows.net
 full:steamclouduseast2.blob.core.windows.net
+regexp:^steamcloud-[a-z0-9-]+\.s3[a-z0-9.-]*\.amazonaws\.com$
