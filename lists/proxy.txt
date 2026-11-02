@@ -137,3 +137,5 @@ full:steamcloudsweden.blob.core.windows.net
 full:steamclouduseast2.blob.core.windows.net
 regexp:^steamcloud-[a-z0-9-]+\.s3[a-z0-9.-]*\.amazonaws\.com$
 regexp:^steamcloud-[a-z0-9-]+\.storage\.googleapis\.com$
+# --- Pornhub video CDN (Reflected Networks rncdnN.com; browsers resolve the CNAME targets directly, so the video went out direct) 2026-11-02
+regexp:^(.+\.)?rncdn[0-9]+\.com$
