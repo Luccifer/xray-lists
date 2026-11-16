@@ -139,3 +139,6 @@ regexp:^steamcloud-[a-z0-9-]+\.s3[a-z0-9.-]*\.amazonaws\.com$
 regexp:^steamcloud-[a-z0-9-]+\.storage\.googleapis\.com$
 # --- Pornhub video CDN (Reflected Networks rncdnN.com; browsers resolve the CNAME targets directly, so the video went out direct) 2026-11-02
 regexp:^(.+\.)?rncdn[0-9]+\.com$
+# --- JetKVM firmware updates (Bunny CDN update.jetkvm.com stalls after ~7 KB when direct) 2026-11-16
+full:update.jetkvm.com
+full:jetkvm-update.b-cdn.net
