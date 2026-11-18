@@ -146,3 +146,5 @@ full:jetkvm-update.b-cdn.net
 full:ecdn.firstimpression.io
 full:d37ymnhuvcy6h0.cloudfront.net
 full:iozih459jld.qfqt6akxc3.ioriveredge.net
+# --- FunPay: funpay.com blocked direct from RU ISP (timeout), tunnel 200 in 1 s 2026-11-18
+domain:funpay.com
