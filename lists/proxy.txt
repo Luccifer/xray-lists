@@ -142,3 +142,7 @@ regexp:^(.+\.)?rncdn[0-9]+\.com$
 # --- JetKVM firmware updates (Bunny CDN update.jetkvm.com stalls after ~7 KB when direct) 2026-11-16
 full:update.jetkvm.com
 full:jetkvm-update.b-cdn.net
+# --- Akinator Play dead: ecdn.firstimpression.io/fi_client.js (CloudFront) freezes after ~13 KB direct and blocks page parsing; tunnel loads in <1 s 2026-11-18
+full:ecdn.firstimpression.io
+full:d37ymnhuvcy6h0.cloudfront.net
+full:iozih459jld.qfqt6akxc3.ioriveredge.net
